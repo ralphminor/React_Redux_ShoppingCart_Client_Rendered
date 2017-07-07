@@ -17,7 +17,7 @@ import {postBook, updateBook, deleteBook} from './actions/booksActions';
 const middleware = applyMiddleware(logger);
 const store = createStore(reducers, middleware);
 
-import BooksList from './components/pages/bookslist';
+import BooksList from './components/pages/booksList';
 
 render(
   <Provider store={store}>
