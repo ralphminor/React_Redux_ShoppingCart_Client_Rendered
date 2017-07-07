@@ -43464,6 +43464,14 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactBootstrap = __webpack_require__(104);
 
+var _reactRedux = __webpack_require__(162);
+
+var _redux = __webpack_require__(71);
+
+var _reactDom = __webpack_require__(20);
+
+var _booksActions = __webpack_require__(171);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -43482,6 +43490,16 @@ var BookForm = function (_React$Component) {
   }
 
   _createClass(BookForm, [{
+    key: 'handleSubmit',
+    value: function handleSubmit() {
+      var book = [{
+        title: (0, _reactDom.findDOMNode)(this.refs.title).value,
+        description: (0, _reactDom.findDOMNode)(this.refs.description).value,
+        price: (0, _reactDom.findDOMNode)(this.refs.price).value
+      }];
+      this.props.postBook(book);
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
@@ -43531,7 +43549,7 @@ var BookForm = function (_React$Component) {
           ),
           _react2.default.createElement(
             _reactBootstrap.Button,
-            { bsStyle: 'primary' },
+            { bsStyle: 'primary', onClick: this.handleSubmit.bind(this) },
             'Save Book'
           )
         )
@@ -43542,7 +43560,10 @@ var BookForm = function (_React$Component) {
   return BookForm;
 }(_react2.default.Component);
 
-exports.default = BookForm;
+function mapDispatchToProps(dispatch) {
+  return (0, _redux.bindActionCreators)({ postBook: _booksActions.postBook }, dispatch);
+}
+exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(BookForm);
 
 /***/ })
 /******/ ]);
