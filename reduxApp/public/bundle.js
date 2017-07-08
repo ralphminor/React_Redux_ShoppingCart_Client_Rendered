@@ -32517,6 +32517,7 @@ Object.defineProperty(exports, "__esModule", {
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 exports.cartReducers = cartReducers;
+exports.totals = totals;
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -32526,7 +32527,11 @@ function cartReducers() {
 
   switch (action.type) {
     case "ADD_TO_CART":
-      return _extends({}, state, { cart: action.payload });
+      return _extends({}, state, {
+        cart: action.payload,
+        totalAmount: totals(action.payload).amount,
+        totalQty: totals(action.payload).qty
+      });
       break;
 
     case "UPDATE_CART":
@@ -32544,15 +32549,39 @@ function cartReducers() {
       var cartUpdate = [].concat(_toConsumableArray(cart_update.slice(0, indexToUpdate)), [upDatedBook], _toConsumableArray(cart_update.slice(indexToUpdate + 1)));
 
       return _extends({}, state, {
-        cart: cartUpdate
+        cart: cartUpdate,
+        totalAmount: totals(cartUpdate).amount,
+        totalQty: totals(cartUpdate).qty
       });
       break;
 
     case "DELETE_CART_ITEM":
-      return _extends({}, state, { cart: action.payload });
+      return _extends({}, state, {
+        cart: action.payload,
+        totalAmount: totals(action.payload).amount,
+        totalQty: totals(action.payload).qty
+      });
       break;
   }
   return state;
+}
+
+// CALCULATE TOTALS
+function totals(payloadArr) {
+
+  var totalAmount = payloadArr.map(function (cartArr) {
+    return cartArr.price * cartArr.quantity;
+  }).reduce(function (a, b) {
+    return a + b;
+  }, 0); // start summing from index 0
+
+  var totalQty = payloadArr.map(function (qty) {
+    return qty.quantity;
+  }).reduce(function (a, b) {
+    return a + b;
+  }, 0);
+
+  return { amount: totalAmount.toFixed(2), qty: totalQty };
 }
 
 /***/ }),
@@ -43860,7 +43889,8 @@ var Cart = function (_React$Component) {
             _react2.default.createElement(
               'h6',
               null,
-              'Total amount:'
+              'Total amount: ',
+              this.props.totalAmount
             ),
             _react2.default.createElement(
               _reactBootstrap.Button,
@@ -43904,7 +43934,8 @@ var Cart = function (_React$Component) {
               _react2.default.createElement(
                 'h6',
                 null,
-                'Total $'
+                'Total $ ',
+                this.props.totalAmount
               )
             ),
             _react2.default.createElement(
@@ -43923,7 +43954,8 @@ var Cart = function (_React$Component) {
 
 function mapStateToProps(state) {
   return {
-    cart: state.cart.cart
+    cart: state.cart.cart,
+    totalAmount: state.cart.totalAmount
   };
 }
 function mapDispatchToProps(dispatch) {
