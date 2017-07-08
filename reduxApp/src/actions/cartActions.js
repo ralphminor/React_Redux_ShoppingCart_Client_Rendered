@@ -8,3 +8,11 @@ export function addToCart(book) {
   }
 }
 
+// DELETE CART ITEM
+export function deleteCartItem(cart) {
+  return {
+  type:"DELETE_CART_ITEM",
+  payload: cart
+  }
+}
+
