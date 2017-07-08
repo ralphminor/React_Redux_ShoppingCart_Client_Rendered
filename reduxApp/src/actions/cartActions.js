@@ -8,6 +8,15 @@ export function addToCart(book) {
   }
 }
 
+// UPDATE CART
+export function updateCart(_id, unit) {
+  return {
+    type:"UPDATE_CART",
+    _id: _id,
+    unit: unit
+  }
+}
+
 // DELETE CART ITEM
 export function deleteCartItem(cart) {
   return {
