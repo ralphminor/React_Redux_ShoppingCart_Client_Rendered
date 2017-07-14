@@ -10818,6 +10818,7 @@ function getBooks() {
     });
   };
 }
+
 // POST A BOOK
 function postBook(book) {
   return function (dispatch) {
@@ -10831,9 +10832,12 @@ function postBook(book) {
 
 // DELETE A BOOK
 function deleteBook(id) {
-  return {
-    type: "DELETE_BOOK",
-    payload: id
+  return function (dispatch) {
+    _axios2.default.delete("/books/" + id).then(function (response) {
+      dispatch({ type: "DELETE_BOOK", payload: id });
+    }).catch(function (err) {
+      dispatch({ type: "DELETE_BOOK_REJECTED", payload: err });
+    });
   };
 }
 

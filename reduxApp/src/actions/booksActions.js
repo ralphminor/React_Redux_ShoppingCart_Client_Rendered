@@ -13,6 +13,7 @@ export function getBooks() {
       })
   }
 }
+
 // POST A BOOK
 export function postBook(book) {
   return function(dispatch) {
@@ -28,12 +29,16 @@ export function postBook(book) {
 
 // DELETE A BOOK
 export function deleteBook(id) {
-  return {
-    type: "DELETE_BOOK",
-    payload: id
+  return function(dispatch) {
+    axios.delete("/books/" + id)
+      .then(function(response) {
+        dispatch({type:"DELETE_BOOK", payload:id})
+      })
+      .catch(function(err) {
+        dispatch({type:"DELETE_BOOK_REJECTED", payload:err})
+      })
+    }
   }
-
-}
 
 // UPDATE A BOOK
 export function updateBook(book) {
