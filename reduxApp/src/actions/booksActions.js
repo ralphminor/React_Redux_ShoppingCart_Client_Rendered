@@ -1,4 +1,5 @@
 "use strict"
+import axios from 'axios';
 
 // GET ALL BOOKS
 export function getBooks() {
@@ -8,9 +9,14 @@ export function getBooks() {
 }
 // POST A BOOK
 export function postBook(book) {
-  return {
-    type: "POST_BOOK",
-    payload: book
+  return function(dispatch) {
+    axios.post("/books", book)
+      .then(function(response) {
+        dispatch({type:"POST_BOOK", payload: response.data})
+      })
+      .catch(function(err) {
+        dispatch({type:"POST_BOOK_REJECTED", payload:"An error occured while adding a book."})
+      })
   }
 }
 
