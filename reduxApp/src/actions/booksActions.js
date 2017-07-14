@@ -3,8 +3,14 @@ import axios from 'axios';
 
 // GET ALL BOOKS
 export function getBooks() {
-  return {
-    type: "GET_BOOKS"
+  return function(dispatch) {
+    axios.get("/books")
+      .then(function(response) {
+        dispatch({type:"GET_BOOKS", payload: response.data})
+      })
+      .catch(function(err) {
+        dispatch({type:"GET_BOOKS_REJECTED", payload: err})
+      })
   }
 }
 // POST A BOOK

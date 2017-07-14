@@ -10810,8 +10810,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // GET ALL BOOKS
 function getBooks() {
-  return {
-    type: "GET_BOOKS"
+  return function (dispatch) {
+    _axios2.default.get("/books").then(function (response) {
+      dispatch({ type: "GET_BOOKS", payload: response.data });
+    }).catch(function (err) {
+      dispatch({ type: "GET_BOOKS_REJECTED", payload: err });
+    });
   };
 }
 // POST A BOOK
@@ -37573,23 +37577,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function booksReducers() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
-    books: [{
-      _id: 1,
-      title: 'this is the book title',
-      description: 'this is the book description',
-      price: 44.33
-    }, {
-      _id: 2,
-      title: 'this is the second book title',
-      description: 'this is the second book description',
-      price: 55.99
-    }]
+    books: []
   };
   var action = arguments[1];
 
   switch (action.type) {
     case "GET_BOOKS":
-      return _extends({}, state, { books: [].concat(_toConsumableArray(state.books)) });
+      return _extends({}, state, { books: [].concat(_toConsumableArray(action.payload)) });
       break;
 
     case "POST_BOOK":
