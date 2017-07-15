@@ -104,6 +104,27 @@ app.put('/books/:_id', function(req, res) {
     })
 });
 
+//----->>> GET BOOKS IMAGES <-----
+app.get('/images', function(req, res) {
+  const imgFolder = __dirname + '/public/images/';
+  //REQUIRE FILE SYSTEM
+  const fs = require('fs');
+  // READ ALL FILES IN THE IMAGE FOLDER
+  fs.readdir(imgFolder, function(err, imgFiles) {
+    if (err) {
+      return console.error(err);
+    }
+    // INITIALIZE AN EMPTY IMAGE FILES ARRAY
+    const imgFilesArr = [];
+    // ADD THE IMAGE FILES TO THE IMAGES ARRAY
+    imgFiles.forEach(function(file) {
+      imgFilesArr.push({name: file});
+    });
+    // SEND THE JSON RESPONSE WITH THE IMAGES ARRAY
+    res.json(imgFilesArr);
+  })
+})
+
 // END APIs
 
 app.listen(3001, function(err) {

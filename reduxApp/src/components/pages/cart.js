@@ -1,7 +1,7 @@
 "use strict"
 import React from 'react';
 import {connect} from 'react-redux';
-import {Modal, Panel, Col, Row, Well, Button, ButtonGroup, Label} from 'react-bootstrap';
+import {Image, Modal, Panel, Col, Row, Well, Button, ButtonGroup, Label} from 'react-bootstrap';
 import {bindActionCreators} from 'redux';
 import {deleteCartItem, updateCart, getCart} from '../../actions/cartActions';
 
@@ -63,7 +63,10 @@ class Cart extends React.Component {
       return (
         <Panel key={cartArr._id}>
           <Row>
-            <Col xs={12} sm={4}>
+            <Col xs={12} sm={2}>
+              <Image src={cartArr.images} responsive /><span>     </span>
+            </Col>
+            <Col xs={12} sm={2}>
               <h6>{cartArr.title}</h6><span>     </span>
             </Col>
             <Col xs={12} sm={2}>
