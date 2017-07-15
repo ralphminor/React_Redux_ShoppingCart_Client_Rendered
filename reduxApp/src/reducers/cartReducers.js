@@ -12,27 +12,10 @@ export function cartReducers(state={cart: []}, action) {
     break;
 
     case "UPDATE_CART":
-    // First create a copy of the current cart
-    const cart_update = [...state.cart]
-    // Find index of book to update
-    const indexToUpdate = cart_update.findIndex(
-      function(book) {
-        return book._id === action._id;
-      }
-    )
-
-    const upDatedBook = {
-      ...cart_update[indexToUpdate],
-      quantity: cart_update[indexToUpdate].quantity + action.unit
-    }
-
-    let cartUpdate =  [...cart_update.slice(0, indexToUpdate), upDatedBook,
-      ...cart_update.slice(indexToUpdate + 1)]
-
     return {...state,
-      cart:cartUpdate,
-      totalAmount: totals(cartUpdate).amount,
-      totalQty: totals(cartUpdate).qty
+      cart:action.payload,
+      totalAmount: totals(action.payload).amount,
+      totalQty: totals(action.payload).qty
     }
     break;
 

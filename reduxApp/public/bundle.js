@@ -11070,9 +11070,15 @@ var go = exports.go = function go(n) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 exports.addToCart = addToCart;
 exports.updateCart = updateCart;
 exports.deleteCartItem = deleteCartItem;
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function addToCart(book) {
   return {
     type: "ADD_TO_CART",
@@ -11081,11 +11087,23 @@ function addToCart(book) {
 }
 
 // UPDATE CART
-function updateCart(_id, unit) {
+function updateCart(_id, unit, cart) {
+  // First create a copy of the current cart
+  var cart_update = cart;
+  // Find index of book to update
+  var indexToUpdate = cart_update.findIndex(function (book) {
+    return book._id === _id;
+  });
+
+  var upDatedBook = _extends({}, cart_update[indexToUpdate], {
+    quantity: cart_update[indexToUpdate].quantity + unit
+  });
+
+  var cartUpdate = [].concat(_toConsumableArray(cart_update.slice(0, indexToUpdate)), [upDatedBook], _toConsumableArray(cart_update.slice(indexToUpdate + 1)));
+
   return {
     type: "UPDATE_CART",
-    _id: _id,
-    unit: unit
+    payload: cartUpdate
   };
 }
 
@@ -22291,13 +22309,13 @@ var Cart = function (_React$Component) {
   }, {
     key: 'onIncrement',
     value: function onIncrement(_id) {
-      this.props.updateCart(_id, 1);
+      this.props.updateCart(_id, 1, this.props.cart);
     }
   }, {
     key: 'onDecrement',
     value: function onDecrement(_id, quantity) {
       if (quantity > 1) {
-        this.props.updateCart(_id, -1);
+        this.props.updateCart(_id, -1, this.props.cart);
       }
     }
   }]);
@@ -38348,9 +38366,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 exports.cartReducers = cartReducers;
 exports.totals = totals;
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 function cartReducers() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { cart: [] };
   var action = arguments[1];
@@ -38365,23 +38380,10 @@ function cartReducers() {
       break;
 
     case "UPDATE_CART":
-      // First create a copy of the current cart
-      var cart_update = [].concat(_toConsumableArray(state.cart));
-      // Find index of book to update
-      var indexToUpdate = cart_update.findIndex(function (book) {
-        return book._id === action._id;
-      });
-
-      var upDatedBook = _extends({}, cart_update[indexToUpdate], {
-        quantity: cart_update[indexToUpdate].quantity + action.unit
-      });
-
-      var cartUpdate = [].concat(_toConsumableArray(cart_update.slice(0, indexToUpdate)), [upDatedBook], _toConsumableArray(cart_update.slice(indexToUpdate + 1)));
-
       return _extends({}, state, {
-        cart: cartUpdate,
-        totalAmount: totals(cartUpdate).amount,
-        totalQty: totals(cartUpdate).qty
+        cart: action.payload,
+        totalAmount: totals(action.payload).amount,
+        totalQty: totals(action.payload).qty
       });
       break;
 
@@ -50219,7 +50221,7 @@ var BookItem = function (_React$Component) {
           this.props.addToCart(book);
         } else {
           // SAME ITEM IS IN THE CART, SO INCREMENT THE ITEM QUANTITY
-          this.props.updateCart(_id, 1);
+          this.props.updateCart(_id, 1, this.props.cart);
         }
       } else {
         // CART IS EMPTY, ADD BOOK TO CART

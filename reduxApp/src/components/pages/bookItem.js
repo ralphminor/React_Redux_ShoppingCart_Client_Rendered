@@ -28,7 +28,7 @@ class BookItem extends React.Component {
       }
       else {
         // SAME ITEM IS IN THE CART, SO INCREMENT THE ITEM QUANTITY
-        this.props.updateCart(_id, 1);
+        this.props.updateCart(_id, 1, this.props.cart);
       }
     }
     else {

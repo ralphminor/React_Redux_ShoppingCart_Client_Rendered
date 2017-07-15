@@ -9,11 +9,27 @@ export function addToCart(book) {
 }
 
 // UPDATE CART
-export function updateCart(_id, unit) {
+export function updateCart(_id, unit, cart) {
+      // First create a copy of the current cart
+    const cart_update = cart
+    // Find index of book to update
+    const indexToUpdate = cart_update.findIndex(
+      function(book) {
+        return book._id === _id;
+      }
+    )
+
+    const upDatedBook = {
+      ...cart_update[indexToUpdate],
+      quantity: cart_update[indexToUpdate].quantity + unit
+    }
+
+    let cartUpdate =  [...cart_update.slice(0, indexToUpdate), upDatedBook,
+      ...cart_update.slice(indexToUpdate + 1)]
+
   return {
     type:"UPDATE_CART",
-    _id: _id,
-    unit: unit
+    payload:cartUpdate
   }
 }
 
