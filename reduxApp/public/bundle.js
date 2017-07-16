@@ -11155,6 +11155,7 @@ exports.getBooks = getBooks;
 exports.postBook = postBook;
 exports.deleteBook = deleteBook;
 exports.updateBook = updateBook;
+exports.resetButton = resetButton;
 
 var _axios = __webpack_require__(410);
 
@@ -11200,6 +11201,13 @@ function updateBook(book) {
   return {
     type: "UPDATE_BOOK",
     payload: book
+  };
+}
+
+// RESET BUTTON
+function resetButton() {
+  return {
+    type: "RESET_BUTTON"
   };
 }
 
@@ -22202,6 +22210,17 @@ var BookForm = function (_React$Component) {
       });
     }
   }, {
+    key: 'resetForm',
+    value: function resetForm() {
+      // RESET THE BUTTON
+      this.props.resetButton();
+
+      (0, _reactDom.findDOMNode)(this.refs.title).value = '';
+      (0, _reactDom.findDOMNode)(this.refs.description).value = '';
+      (0, _reactDom.findDOMNode)(this.refs.price).value = '';
+      this.setState({ img: '' });
+    }
+  }, {
     key: 'render',
     value: function render() {
 
@@ -22299,8 +22318,10 @@ var BookForm = function (_React$Component) {
               ),
               _react2.default.createElement(
                 _reactBootstrap.Button,
-                { bsStyle: 'primary', onClick: this.handleSubmit.bind(this) },
-                'Save Book'
+                {
+                  onClick: !this.props.msg ? this.handleSubmit.bind(this) : this.resetForm.bind(this),
+                  bsStyle: !this.props.style ? "primary" : this.props.style },
+                !this.props.msg ? "Save book" : this.props.msg
               )
             ),
             _react2.default.createElement(
@@ -22342,14 +22363,17 @@ var BookForm = function (_React$Component) {
 
 function mapStateToProps(state) {
   return {
-    books: state.books.books
+    books: state.books.books,
+    msg: state.books.msg,
+    style: state.books.style
   };
 }
 function mapDispatchToProps(dispatch) {
   return (0, _redux.bindActionCreators)({
     getBooks: _booksActions.getBooks,
     postBook: _booksActions.postBook,
-    deleteBook: _booksActions.deleteBook
+    deleteBook: _booksActions.deleteBook,
+    resetButton: _booksActions.resetButton
   }, dispatch);
 }
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BookForm);
@@ -38432,7 +38456,15 @@ function booksReducers() {
       break;
 
     case "POST_BOOK":
-      return { books: [].concat(_toConsumableArray(state.books), _toConsumableArray(action.payload)) };
+      return _extends({}, state, { books: [].concat(_toConsumableArray(state.books), _toConsumableArray(action.payload)), msg: 'Saved!  Click to continue.', style: 'success' });
+      break;
+
+    case "POST_BOOK_REJECTED":
+      return _extends({}, state, { msg: 'Please, try again.', style: 'danger' });
+      break;
+
+    case "RESET_BUTTON":
+      return _extends({}, state, { msg: null, style: 'primary' });
       break;
 
     case "DELETE_BOOK":
