@@ -39543,12 +39543,12 @@ var BooksList = function (_React$Component) {
                 _react2.default.createElement(
                   'h3',
                   null,
-                  'First slide label'
+                  '\u201CA reader lives a thousand lives before he dies..."'
                 ),
                 _react2.default.createElement(
                   'p',
                   null,
-                  'Nulla vitae elit libero, a pharetra augue mollis interdum.'
+                  '\u2015 George R.R. Martin, A Dance with Dragons'
                 )
               )
             ),
@@ -39562,12 +39562,12 @@ var BooksList = function (_React$Component) {
                 _react2.default.createElement(
                   'h3',
                   null,
-                  'Second slide label'
+                  '\u201CNever trust anyone who has not brought a book with them.\u201D'
                 ),
                 _react2.default.createElement(
                   'p',
                   null,
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                  '\u2015 Lemony Snicket, Horseradish'
                 )
               )
             )

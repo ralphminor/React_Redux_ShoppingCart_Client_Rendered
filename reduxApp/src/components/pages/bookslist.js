@@ -34,15 +34,15 @@ class BooksList extends React.Component {
             <Carousel.Item>
               <img width={900} height={300} alt="900x300" src="/images/home1.jpg"/>
               <Carousel.Caption>
-                <h3>First slide label</h3>
-                <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                <h3>“A reader lives a thousand lives before he dies..."</h3>
+                <p>― George R.R. Martin, A Dance with Dragons</p>
               </Carousel.Caption>
             </Carousel.Item>
             <Carousel.Item>
               <img width={900} height={300} alt="900x300" src="/images/home2.jpg"/>
               <Carousel.Caption>
-                <h3>Second slide label</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                <h3>“Never trust anyone who has not brought a book with them.”</h3>
+                <p>― Lemony Snicket, Horseradish</p>
               </Carousel.Caption>
             </Carousel.Item>
           </Carousel>
