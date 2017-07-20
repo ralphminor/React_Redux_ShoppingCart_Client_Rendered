@@ -3,6 +3,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
+require('dotenv').config();
+const MLAB_CONNECT_STRING=process.env.MLAB_CONNECT_STRING;
 
 var app = express();
 
@@ -12,7 +14,10 @@ app.use(cookieParser());
 
 // APIs
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/bookshop');
+// DEPLOYED mLab DB CONNECTION FOR PRODUCTION
+mongoose.connect(MLAB_CONNECT_STRING);
+// LOCAL DB CONNECTION FOR DEVELOPMENT
+// mongoose.connect('mongodb://localhost:27017/bookshop');
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
